@@ -1,0 +1,70 @@
+mysql:
+  enabled: true
+  root:
+    password: example
+    forcePassword: true
+  master:
+    persistence:
+      enabled: true
+  slave:
+    replicas: 0
+  initdbScripts:
+    my_init_script.sql: |
+      CREATE DATABASE IF NOT EXISTS example CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+      CREATE USER IF NOT EXISTS 'example'@'%' IDENTIFIED WITH mysql_native_password BY 'example';
+      GRANT ALL ON *.* TO 'example'@'%';
+
+rabbitmq:  
+  enabled: true
+  persistence:
+    enabled: false
+  auth:
+    username: rabbit   
+    password: rabbit
+    erlangCookie: rabbit
+    existingPasswordSecret: rabbitmq-secret  
+    existingErlangSecret: rabbitmq-secret
+  readinessProbe:
+    enabled: false
+  livenessProbe:
+    enabled: false
+  management:
+    enabled: true
+
+memcached:
+  enabled: true
+  replicaCount: 1
+
+redis:
+  enabled: true
+  usePassword: false
+  cluster:
+    slaveCount: 0
+
+nginx:
+  enabled: true
+  service:
+    type: NodePort
+    port: 30000
+    nodePorts:
+      http: 30000
+      https:
+  serverBlock: |
+    server {
+      listen 8080;
+      client_max_body_size 1000M;
+      client_body_buffer_size 128k;    
+
+      access_log /opt/bitnami/nginx/logs/access.log;
+      error_log /opt/bitnami/nginx/logs/error.log notice;
+
+      rewrite_log on;
+
+      # health and readiness checks
+      location /chkhealth {
+          return 200;
+      }
+      location /chkready {
+          return 200;
+      }
+    }

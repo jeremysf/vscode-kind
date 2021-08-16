@@ -1,0 +1,32 @@
+apiVersion: v2
+appVersion: "1.0"
+description: Example
+name: example
+version: 0.1.0
+
+dependencies:
+
+  - name: rabbitmq
+    version: 8.20.1
+    repository: https://charts.bitnami.com/bitnami
+    condition: rabbitmq.enabled
+
+  - name: mysql
+    version: 6.12.0
+    repository: https://charts.bitnami.com/bitnami
+    condition: mysql.enabled
+
+  - name: memcached
+    version: 4.2.17
+    repository: https://charts.bitnami.com/bitnami
+    condition: memcached.enabled
+
+  - name: redis
+    version: 10.6.13
+    repository: https://charts.bitnami.com/bitnami
+    condition: redis.enabled
+
+  - name: nginx
+    version: 6.0.2
+    repository: https://charts.bitnami.com/bitnami
+    condition: nginx.enabled
